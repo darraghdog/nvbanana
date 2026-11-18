@@ -9,7 +9,7 @@ The [solution writeup](https://www.kaggle.com/competitions/arc-prize-2026-arc-ag
 - Checkpoint conversion for inference on four L4 GPUs
 - Per-puzzle test-time fine-tuning and a Flash-Next blend
 
-![Book rules and ARC training summaries feed Stage 2/3 input generation, Stage 4 output verification, and the SFT dataset builder.](sdg/assets/sdg-stage-flow.png)
+![Book rules and ARC training summaries feed Stage 2/3 input generation, Stage 4 output verification, and dataset assembly for Qwen3.8-27B supervised fine-tuning with NeMo RL and Megatron.](sdg/assets/sdg-stage-flow.png)
 
 ## Synthetic Data Generation
 
