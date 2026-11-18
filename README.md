@@ -15,7 +15,7 @@ The [SDG guide](sdg/README.md) shows how book ideas became verified ARC puzzles,
 
 ## Model Training
 
-The text model is Qwen3.8-27B fine-tuned with NeMo RL and Megatron. The release will include a small training recipe and a record of the production checkpoint lineage.
+The text model is Qwen3.8-27B fine-tuned with NeMo RL and Megatron. The [training guide](training/README.md) builds the ARC-16 base and runs the reduced SFT recipe. The [production record](training/production.md) traces the dataset mixtures and checkpoints through step 188222.
 
 ## Weight Preparation
 

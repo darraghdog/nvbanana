@@ -1,0 +1,5 @@
+{
+  "nemo_rl": "87f1dfb1f6e050ec1d8f9dc3a93dbe98ca763280",
+  "megatron_bridge": "151168f36372132c8fb8f926501f573019feb967",
+  "transformers": "5.8.1"
+}

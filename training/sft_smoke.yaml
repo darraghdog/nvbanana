@@ -1,0 +1,145 @@
+# One full-parameter BF16 update on the four Hoffmann rows.
+sft:
+  max_num_epochs: 1
+  max_num_steps: 1
+  val_period: 0
+  val_batches: 200
+  val_global_batch_size: 256
+  val_micro_batch_size: 1
+  val_at_start: false
+  val_at_end: false
+  seed: 24
+  only_unmask_final: false
+checkpointing:
+  enabled: false
+  checkpoint_dir: outputs/sft/checkpoints
+  metric_name: val:val_loss
+  higher_is_better: false
+  keep_top_k: 3
+  save_period: 50
+  checkpoint_must_save_by: null
+  save_optimizer: true
+policy:
+  model_name: models/Qwen3.8-27B-ARC16
+  tokenizer:
+    name: ${policy.model_name}
+    chat_template: ${policy.model_name}/chat_template.jinja
+    chat_template_kwargs: null
+  train_global_batch_size: 4
+  train_micro_batch_size: 1
+  max_total_sequence_length: 4096
+  precision: bfloat16
+  offload_optimizer_for_logprob: false
+  dtensor_cfg:
+    enabled: false
+  dynamic_batching:
+    enabled: false
+  sequence_packing:
+    enabled: true
+    train_mb_tokens: 4096
+    algorithm: modified_first_fit_decreasing
+    sequence_length_round: 64
+  make_sequence_length_divisible_by: 64
+  max_grad_norm: 0.5
+  optimizer:
+    name: torch.optim.AdamW
+    kwargs:
+      lr: 3.0e-05
+      weight_decay: 0.1
+      betas:
+      - 0.9
+      - 0.98
+      eps: 1.0e-08
+      foreach: false
+      fused: false
+  megatron_cfg:
+    enabled: true
+    use_linear_ce_fusion_loss: false
+    linear_ce_fusion_chunk_size: 256
+    force_reconvert_from_hf: false
+    env_vars:
+      PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
+    empty_unused_memory_level: 1
+    activation_checkpointing: true
+    recompute_granularity: full
+    recompute_modules: null
+    tensor_model_parallel_size: 4
+    expert_tensor_parallel_size: 1
+    expert_model_parallel_size: 1
+    pipeline_model_parallel_size: 1
+    context_parallel_size: 1
+    pipeline_dtype: bfloat16
+    num_layers_in_first_pipeline_stage: null
+    num_layers_in_last_pipeline_stage: null
+    sequence_parallel: true
+    freeze_moe_router: false
+    moe_router_dtype: null
+    moe_router_load_balancing_type: aux_loss
+    moe_router_bias_update_rate: 0.001
+    moe_permute_fusion: true
+    apply_rope_fusion: true
+    bias_activation_fusion: false
+    defer_fp32_logits: false
+    moe_per_layer_logging: false
+    moe_enable_deepep: false
+    moe_token_dispatcher_type: alltoall
+    moe_shared_expert_overlap: false
+    gradient_accumulation_fusion: false
+    use_fused_weighted_squared_relu: false
+    peft:
+      enabled: false
+    optimizer:
+      optimizer: adam
+      lr: 3.0e-05
+      min_lr: 3.0e-05
+      weight_decay: 0.1
+      bf16: true
+      fp16: false
+      params_dtype: float32
+      adam_beta1: 0.9
+      adam_beta2: 0.98
+      adam_eps: 1.0e-08
+      sgd_momentum: 0.9
+      use_distributed_optimizer: true
+      use_precision_aware_optimizer: false
+      clip_grad: 0.5
+      optimizer_cpu_offload: false
+      optimizer_offload_fraction: 0.0
+    scheduler:
+      start_weight_decay: 0.1
+      end_weight_decay: 0.1
+      weight_decay_incr_style: constant
+      lr_decay_style: constant
+      lr_decay_iters: 1
+      lr_warmup_iters: 0
+      lr_warmup_init: 3.0e-05
+    distributed_data_parallel_config:
+      grad_reduce_in_fp32: true
+      overlap_grad_reduce: true
+      overlap_param_gather: true
+      data_parallel_sharding_strategy: optim_grads_params
+      use_custom_fsdp: false
+    fp8_cfg:
+      enabled: false
+      fp8: e4m3
+      fp8_recipe: blockwise
+      fp8_param: false
+data:
+  max_input_seq_length: ${policy.max_total_sequence_length}
+  add_bos: false
+  add_eos: false
+  add_generation_prompt: true
+  shuffle: true
+  num_workers: 0
+  train: {}
+logger:
+  log_dir: outputs/sft/logs
+  wandb_enabled: false
+  tensorboard_enabled: false
+  mlflow_enabled: false
+  swanlab_enabled: false
+  monitor_gpus: false
+cluster:
+  gpus_per_node: 4
+  num_nodes: 1
+  segment_size: null
