@@ -11,24 +11,7 @@ The [solution writeup](https://www.kaggle.com/competitions/arc-prize-2026-arc-ag
 
 ## Synthetic Data Generation
 
-Old puzzle books, recreational mathematics, games, and engineering manuals supplied rule ideas for the synthetic data. Puzzles about counters suggest grid rules based on line crossings. Tiling problems suggest edge matching, mazes suggest path tracing, and mechanisms such as gears and hoists suggest chains of state changes.
-
-![Archival portraits of Henry Dudeney, Professor Hoffmann, Sam Loyd, Édouard Lucas, W. W. Rouse Ball, Charles-Ange Laisant, Stewart Culin, and Agostino Ramelli.](sdg/assets/book-inspiration-collage.jpg)
-
-*Eight authors from the source collection. [Portrait credits](sdg/assets/portrait-credits.md).*
-
-The Hoffmann example begins with a challenge about arranging counters in rows. Gemini extracts the line-crossing idea, and an ARC-AGI-2 training task supplies the framed-grid format. The generated rule crops the input to the frame, recolours its border, and stamps a yellow cross where four lines meet. Three independently written output programs agreed on all 30 generated inputs before the puzzle was accepted.
-
-![A book puzzle about counters on intersecting lines becomes an ARC specification, tested generator code, and example input and output grids.](sdg/assets/hoffmann-book-to-arc.png)
-
-*From a counters puzzle in [Hoffmann’s Puzzles Old and New (1893), p. 267](https://archive.org/details/puzzlesoldnew00hoff) to an ARC-AGI-2 task.*
-
-The Kaggle demos show how to build examples from the same book.
-
-1. [Book to ARC specs with Gemini](https://www.kaggle.com/code/darraghdog/book-to-arc-specs-with-gemini) screens page images, extracts puzzle specs, and pairs them with ARC-AGI-2 training summaries.
-2. [Book spec to ARC puzzles with Flash](https://www.kaggle.com/code/darraghdog/book-spec-to-arc-puzzles-with-flash) generates testable input programs and checks output agreement. This demo uses Flash-Next for the generation stages shown with GPT-OSS-120B in the diagram.
-
-The release example uses four augmented training rows per accepted base puzzle.
+The [SDG guide](sdg/README.md) shows how book ideas became verified ARC puzzles, with a worked Hoffmann example and two Kaggle demos. The [book sourcing guide](sdg/sourcing/README.md) contains the example bibliography and prompts.
 
 ## Model Training
 

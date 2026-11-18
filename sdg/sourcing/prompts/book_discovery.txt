@@ -1,0 +1,9 @@
+Reconstructed example prompt for book discovery
+
+Find digitized editions of older, human-authored puzzle books, recreational mathematics books, games manuals, or illustrated engineering works that could inspire new 2D coloured-grid puzzles.
+
+Look for diagrams with routes, tilings, dissections, symmetry, board moves, counting, or chained state changes. Prefer a mechanism that combines two operations, such as following a path and then marking a destination, or identifying a piece and then matching its edges. The eventual grid puzzle should be solvable from its demonstrations without language, cultural facts, specialist notation, or outside knowledge.
+
+For each candidate, return the author, title, edition, publication year, language, catalogue URL, scan URL, and rights evidence for that edition. Give up to two promising pages or plates and briefly describe a rule idea each could inspire. Distinguish a verified page from a lead that still needs inspection.
+
+Flag near-identical reprints, duplicate scans, uncertain rights, and books without inspectable pages. Keep the source idea distinct from the book's artwork or layout. Do not use ARC-AGI-2 evaluation material to select sources or develop mechanisms.

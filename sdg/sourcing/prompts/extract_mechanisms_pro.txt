@@ -1,0 +1,94 @@
+You are extracting source-derived ARC-AGI-2 inspiration mechanisms from public-domain puzzle-book pages.
+
+You receive page image(s), OCR text when available, scout labels, and source metadata. Output a JSON array. Each object should be one ARC-safe puzzle mechanism inspired by the page(s). Do NOT copy the source page as a training puzzle. Distill mechanisms that can later be rendered into fresh ARC-style colored grids.
+
+Keep only mechanisms that satisfy ARC-AGI-2 scope:
+- 2D colored grids, 1x1 to 30x30, colors 0-9.
+- Deterministic unique output from demonstrations.
+- At least one prior: objectness, symmetry, counting, geometry_topology, agentness.
+- At least one compositional property: multi-rule, multi-step, contextual, symbolic.
+- No language/text, culture facts, specialist math notation, real-world units, or memorized facts in the final ARC task.
+
+Prefer diversity and new ideas. Good outputs have at least two interacting operations, such as count then project, detect then transform, route then mark, compare then fill, split then reassemble, or infer a local rule then apply it contextually. Avoid plain property filters unless a contextual condition is included.
+
+Extract 0-4 useful mechanisms from the filtered page. It is acceptable to return an empty JSON array if the page has no ARC-safe mechanism after inspection. Do this for blank pages, decorative-only images, title/index/review pages, OCR/page-image mismatches, or pages where the scout labels appear to hallucinate mechanisms not supported by the image or OCR. Prefer the best 1-2 mechanisms for ordinary pages; use 3-4 only for unusually dense pages with clearly distinct mechanisms.
+
+Each object must have this schema:
+
+{
+  "uid": "<source-family-page-mechanism id>",
+  "source_family": "<copy from metadata>",
+  "source_work": "<copy from metadata>",
+  "volume": "<copy from metadata>",
+  "page_start": 1,
+  "page_end": 1,
+  "source_kind": "book_page_image_plus_ocr",
+  "raw_source_policy": "mechanism_only_no_copy",
+  "model_used": "<model id>",
+  "prompt_version": "extract_mechanisms_pro_v1",
+  "title": "short plain-English title",
+  "source_observation": "what the page/figure/text appears to explain",
+  "figure_description": "visual description of relevant figure(s), or empty string",
+  "arc_conversion": "how to convert the idea into an ARC-style input/output grid task without copying the source figure",
+  "priors": ["objectness"],
+  "compositional": ["multi-rule"],
+  "diversity_tags": ["tiling", "counting"],
+  "arc_fit": "high|medium|low",
+  "extraction_grade": "A|B|C|D|reject",
+  "extraction_confidence": 0.0,
+  "source_support": "image_and_ocr|image_only|ocr_only|weak_or_mismatch",
+  "rating_rationale": "one sentence explaining why this extraction should be kept, revised, or rejected",
+  "risk_notes": "brief caveats or rejection filters",
+  "stg1_summary": "<rules_summary>... exactly 7 XML sections ...</puzzle_concepts>"
+}
+
+Grade rubric:
+- A: strong source support, clean ARC2 conversion, compositional, likely useful as stg2 input.
+- B: useful mechanism with minor ambiguity or moderate conversion work.
+- C: marginal but salvageable; keep only for diversity or manual review.
+- D: weak, underspecified, mostly OCR-only, or likely redundant; validation may reject.
+- reject: not actually supported by the page or outside ARC2 scope; prefer returning [] instead.
+
+The stg1_summary must contain exactly these XML sections in order, separated by blank lines:
+
+<rules_summary>
+2-4 concise sentences describing the visual/geometric transformation. Include the core rule, the key ambiguity or edge case the solver must resolve when relevant, and any deterministic tie-break needed for a unique output. No source names.
+</rules_summary>
+
+<grid_constraints>
+- Input grid size: height integer in [min, max], width integer in [min, max]
+- Output grid size relationship: [same as input / fixed size / scaled / depends on content]
+- Background color: [number and name]
+- Functional colors: [each number and its role]
+- Number of objects: [range]
+- Object size range: [range]
+- Structural invariants: [list]
+</grid_constraints>
+
+<input_generation>
+Parameterized generation procedure with explicit numeric ranges and rejection criteria.
+</input_generation>
+
+<output_relationship>
+- Output grid dimensions: [relation to input]
+- Pixels preserved from input: [list]
+- New pixels added / removed: [list]
+- How the transformation maps input to output: [mapping]
+</output_relationship>
+
+<solution_steps>
+1. First step
+2. Second step
+...
+</solution_steps>
+
+<key_insight>
+One sentence.
+</key_insight>
+
+<puzzle_concepts>
+- parameterized concept 1
+- parameterized concept 2
+</puzzle_concepts>
+
+Return only JSON. No markdown fences.
