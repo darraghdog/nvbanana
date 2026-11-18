@@ -19,7 +19,7 @@ The text model is Qwen3.8-27B fine-tuned with NeMo RL and Megatron. The [trainin
 
 ## Weight Preparation
 
-The 27B notebook uses the mixed GPTQ export of step 188222. The blend also uses Qwen3.8-Flash-Next pruned to 352 experts per layer. The release will document conversion and installation for both checkpoints.
+The [weight preparation guide](weights/README.md) exports step 188222, rebuilds the ARC training calibration prompts, and packages the mixed GPTQ weights and split TTFT configs used on Kaggle. The blend also uses Qwen3.8-Flash-Next pruned to 352 experts per layer.
 
 ## Kaggle Inference
 

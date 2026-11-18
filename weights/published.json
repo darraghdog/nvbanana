@@ -1,0 +1,13 @@
+{
+  "dataset": "darraghdog/qwen38-27b-src11plus16abcd-step188222-gptq-mixed",
+  "metadata_sha256": {
+    "bottom/config.json": "ce492b3b43affdd3533a56f692e799fe6329f7a16718c1e6286f43cadb1d41f7",
+    "bottom/model.safetensors.index.json": "7209141558631f79b05c5ba1bddfea9941c38a9f9c330c5e7d8cc368d7ae3fe8",
+    "config.json": "c2b3e2ce416a55228f194a6cbe21a9496d1b488092ff2a0b28f5b14497eb3cd2",
+    "model.safetensors.index.json": "3574c269bbfc69ae74586578b9d1f3ead8a65bcfb5c20f0337ba7fbbd15d0dfe",
+    "top/config.json": "ce492b3b43affdd3533a56f692e799fe6329f7a16718c1e6286f43cadb1d41f7",
+    "top/model.safetensors.index.json": "2310f2a0fc97b7005653fb841569a8acfb6cfc93db97b34254f21a780f26123d"
+  },
+  "step": 188222,
+  "version": 1
+}
