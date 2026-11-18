@@ -12,6 +12,8 @@ These are three examples from the source collection. The archive links identify 
 | Henry Dudeney | *Amusements in Mathematics*, Nelson, 1917 | Dissections, constrained arrangements, and counting with figures. [Boston College Libraries scan](https://archive.org/details/amusementsinmath00dude) |
 | Henry Dudeney | *The Canterbury Puzzles and Other Curious Problems*, second edition, Nelson, 1919 | Spatial arrangements, paths, and constraints from the illustrated puzzles. [University of Toronto scan](https://archive.org/details/canterburypuzzle00dudeuoft) |
 
+[Examples from the book sources](examples.md) trace three documented inspirations into the pipeline.
+
 ## Prompts
 
 1. **Find candidate books.** Use the [book discovery prompt](prompts/book_discovery.txt) to look for promising editions and representative pages. This prompt is reconstructed from the sourcing method. The candidate record includes the catalogue link, exact edition, rights evidence, and pages to inspect. Check those details against the archive entry.
