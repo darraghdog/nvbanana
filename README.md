@@ -9,11 +9,11 @@ The [solution writeup](https://www.kaggle.com/competitions/arc-prize-2026-arc-ag
 - Checkpoint conversion for inference on four L4 GPUs
 - Per-puzzle test-time fine-tuning and a Flash-Next blend
 
+![Book rules and ARC training summaries feed Stage 2/3 input generation, Stage 4 output verification, and the SFT dataset builder.](sdg/assets/sdg-stage-flow.png)
+
 ## Synthetic Data Generation
 
 The [SDG guide](sdg/README.md) shows how book ideas became verified ARC puzzles, with a worked Hoffmann example and two Kaggle demos. The [book sourcing guide](sdg/sourcing/README.md) contains the example bibliography and prompts. The [dataset builder](sdg/dataset/README.md) turns accepted puzzles into four augmented SFT rows each.
-
-![Book rules and ARC training summaries feed Stage 2/3 input generation, Stage 4 output verification, and the SFT dataset builder.](sdg/assets/sdg-stage-flow.png)
 
 ![Hoffmann’s counters puzzle becomes an ARC specification, tested generator code, and example input and output grids.](sdg/assets/hoffmann-book-to-arc.png)
 
