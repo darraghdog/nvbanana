@@ -53,7 +53,9 @@ generated puzzles to a validation split.
 ## Run NeMo RL SFT
 
 Use a NeMo RL 0.7.0 environment with CUDA, Megatron Core, Megatron Bridge,
-Transformer Engine, and the matching Transformers release. The
+Transformer Engine, and the matching Transformers release. Install the
+Megatron Bridge worker dependencies, including NVIDIA ModelOpt, in the
+training environment. The
 [runtime pins](runtime.json) identify the NeMo RL and Megatron Bridge
 source checkouts and Transformers version. Make both pinned Git
 checkouts importable from the training environment. The driver checks
