@@ -1,0 +1,16 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+.env
+.env.*
+kaggle.json
+
+/data/
+/artifacts/
+/checkpoints/
+/outputs/
+/submission.json
+*.safetensors
+*.sqsh
