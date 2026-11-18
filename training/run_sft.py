@@ -2,6 +2,7 @@
 
 import argparse
 from importlib.util import find_spec
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -16,8 +17,11 @@ from nemo_rl.distributed.virtual_cluster import init_ray
 from nemo_rl.utils.config import load_config, register_omegaconf_resolvers
 from nemo_rl.utils.logger import get_next_experiment_dir
 from omegaconf import OmegaConf
+import ray
+from ray.util.scheduling_strategies import NodeAffinitySchedulingStrategy
 import transformers
 
+from training.compile_cache import COMPLETE_NAME, CacheSettings, cache_settings, publish, seed
 from training.compact_role_tokens import require_compact_role_tokens, restore_compact_role_tokens
 from training.prepare_model import ASSETS, read_json, sha256
 
@@ -86,7 +90,38 @@ def sft_preprocessor(sample, task_data_spec, tokenizer, max_seq_length, idx):
     }
 
 
-def load_split(path, tokenizer, task_spec, config, audit_all):
+def eos_runtime_environment() -> dict[str, str]:
+    root = Path(find_spec("nemo_rl").origin).parent
+    patches = {
+        "algorithms/sft.py": "ARC2_SFT_DATALOADER_OPTIONS_V2",
+        "models/megatron/train.py": "ARC2_PRE_FINALIZE_EMPTY_CACHE_V2",
+    }
+    for relative_path, marker in patches.items():
+        if marker not in (root / relative_path).read_text(encoding="utf-8"):
+            raise RuntimeError("Apply training/eos_optimizations.patch to the pinned NeMo RL checkout")
+    return {
+        "ARC2_NEMORL_DATALOADER_PIN_MEMORY": "1",
+        "ARC2_NEMORL_DATALOADER_SNAPSHOT_EVERY_N_STEPS": "1",
+        "ARC2_NEMORL_EMPTY_CACHE_BEFORE_FINALIZE_GRADS": "1",
+    }
+
+
+def shuffle_training_dataset(dataset, seed):
+    cache_dir = os.environ.get("ARC2_DATASET_SHUFFLE_CACHE_DIR")
+    if cache_dir is None:
+        return dataset.shuffle(seed=seed, keep_in_memory=True)
+    directory = Path(cache_dir)
+    if not directory.is_absolute():
+        raise ValueError("ARC2_DATASET_SHUFFLE_CACHE_DIR must be absolute")
+    fingerprint = dataset._fingerprint
+    if not re.fullmatch(r"[0-9a-f]+", fingerprint):
+        raise ValueError(f"Unexpected dataset fingerprint {fingerprint!r}")
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory / f"shuffle-{fingerprint}-seed{seed}.arrow"
+    return dataset.shuffle(seed=seed, indices_cache_file_name=str(path))
+
+
+def load_split(path, tokenizer, task_spec, config, audit_all, *, eos_shuffle=False):
     dataset = load_from_disk(str(path))
     if dataset.column_names != ["puzzle_name", "messages"] or not len(dataset):
         raise ValueError(f"{path} must be a nonempty dataset from the SDG Hugging Face export")
@@ -94,9 +129,51 @@ def load_split(path, tokenizer, task_spec, config, audit_all):
     for idx in range(len(dataset) if audit_all else 1):
         prepared = sft_preprocessor(dataset[idx], task_spec, tokenizer, sequence_length, idx)
         print(f"ARC-16 formatter check: {dataset[idx]['puzzle_name']} ({prepared['length']} tokens)", flush=True)
+    if eos_shuffle:
+        dataset = shuffle_training_dataset(dataset, config.sft.seed)
     return AllTaskProcessedDataset(
         dataset, tokenizer, task_spec, sft_preprocessor, max_seq_length=sequence_length,
     )
+
+
+def run_cache_on_nodes(action, cache, nodes):
+    task = ray.remote(num_cpus=0)(action)
+    ray.get([
+        task.options(
+            scheduling_strategy=NodeAffinitySchedulingStrategy(node_id=node, soft=False),
+        ).remote(cache.local_root, cache.snapshot_dir, cache.key)
+        for node in nodes
+    ])
+
+
+def seed_compile_cache(cache: CacheSettings, expected_nodes: int) -> list[str]:
+    nodes = sorted(
+        (node for node in ray.nodes() if node["Alive"] and node["Resources"].get("GPU", 0) > 0),
+        key=lambda node: (node["NodeManagerHostname"], node["NodeID"]),
+    )
+    if len(nodes) != expected_nodes:
+        raise RuntimeError(
+            f"Compiler cache expects {expected_nodes} live GPU Ray nodes, found {len(nodes)}"
+        )
+    node_ids = [node["NodeID"] for node in nodes]
+    run_cache_on_nodes(seed, cache, node_ids)
+    return node_ids
+
+
+def arm_compile_cache_publication(policy, cache, node):
+    train = policy.train
+    published = False
+
+    def train_and_publish(*args, **kwargs):
+        nonlocal published
+        result = train(*args, **kwargs)
+        # NeMo RL uses policy.train(eval_mode=True) for validation too.
+        if not published and not kwargs.get("eval_mode", False):
+            run_cache_on_nodes(publish, cache, [node])
+            published = True
+        return result
+
+    policy.train = train_and_publish
 
 
 def main():
@@ -115,13 +192,22 @@ def main():
     config.policy.model_name = str(args.model.resolve())
     config.checkpointing.checkpoint_dir = str((args.output / "checkpoints").resolve())
     config.logger.log_dir = str((args.output / "logs").resolve())
-    config = MasterConfig(**OmegaConf.to_container(config, resolve=True))
+    config_dict = OmegaConf.to_container(config, resolve=True)
+    cache = cache_settings(config_dict.pop("compile_cache", None))
+    eos_optimizations = config_dict.pop("eos_optimizations", False)
+    if type(eos_optimizations) is not bool:
+        raise ValueError("eos_optimizations must be a boolean")
+    runtime_env = eos_runtime_environment() if eos_optimizations else {}
+    config = MasterConfig(**config_dict)
 
     tokenizer = get_tokenizer(config.policy["tokenizer"])
     if len(tokenizer) != 16:
         raise ValueError(f"Expected 16 tokenizer IDs, got {len(tokenizer)}")
     task_spec = TaskDataSpec(task_name="AGI")
-    train = load_split(args.data / "train", tokenizer, task_spec, config, args.preflight)
+    train = load_split(
+        args.data / "train", tokenizer, task_spec, config, args.preflight,
+        eos_shuffle=eos_optimizations and not args.preflight,
+    )
     if len(train) < config.policy["train_global_batch_size"]:
         raise ValueError("Training split is smaller than the global batch size")
     validation = None
@@ -134,10 +220,20 @@ def main():
         return
 
     config.logger["log_dir"] = get_next_experiment_dir(config.logger["log_dir"])
+    if cache is not None:
+        runtime_env.update(cache.environment())
+    if runtime_env:
+        os.environ.update(runtime_env)
+        megatron = config.policy["megatron_cfg"]
+        megatron["env_vars"] = {**(megatron.get("env_vars") or {}), **runtime_env}
+
     init_ray()
+    cache_nodes = seed_compile_cache(cache, config.cluster["num_nodes"]) if cache else []
     policy, _, train_loader, val_loader, loss_fn, logger, checkpointer, state, config = setup(
         config, tokenizer, train, validation,
     )
+    if cache is not None and not (cache.snapshot_dir / COMPLETE_NAME).is_file():
+        arm_compile_cache_publication(policy, cache, cache_nodes[0])
     sft_train(policy, train_loader, val_loader, tokenizer, loss_fn, config, logger, checkpointer, state)
     print("ARC-16 SFT finished", flush=True)
 

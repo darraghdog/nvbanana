@@ -1,0 +1,22 @@
+# EOS settings on the reduced sample. Scale cluster.num_nodes for a larger run.
+defaults: sft_smoke.yaml
+
+eos_optimizations: true
+compile_cache:
+  enabled: true
+  key: ${oc.env:NVBANANA_COMPILE_CACHE_KEY}
+  local_base: ${oc.env:NVBANANA_COMPILE_CACHE_LOCAL}
+  snapshot_base: ${oc.env:NVBANANA_COMPILE_CACHE_SHARED}
+  compile_threads: 4
+policy:
+  max_total_sequence_length: 12288
+  sequence_packing:
+    train_mb_tokens: 16384
+  megatron_cfg:
+    pipeline_model_parallel_size: 2
+    env_vars:
+      PYTORCH_CUDA_ALLOC_CONF: expandable_segments:False
+data:
+  num_workers: 4
+cluster:
+  gpus_per_node: 8

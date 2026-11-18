@@ -1,0 +1,128 @@
+--- a/nemo_rl/algorithms/sft.py
++++ b/nemo_rl/algorithms/sft.py
+@@ -151,6 +151,18 @@
+     # ==========================
+     #           Data
+     # ==========================
++    # ARC2_SFT_DATALOADER_OPTIONS_V2: TorchData otherwise transfers worker state every step.
++    # Match this to the training checkpoint cadence to retain resumability
++    # without putting snapshot bookkeeping on every optimizer-step boundary.
++    # Pin-memory mode also lets its background thread drain and reconstruct the
++    # multiprocessing result queue while the previous GPU step is executing.
++    arc2_snapshot_every_n_steps = max(
++        1,
++        int(os.environ.get("ARC2_NEMORL_DATALOADER_SNAPSHOT_EVERY_N_STEPS", "1")),
++    )
++    arc2_dataloader_pin_memory = (
++        os.environ.get("ARC2_NEMORL_DATALOADER_PIN_MEMORY") == "1"
++    )
+     train_dataloader = StatefulDataLoader(
+         train_dataset,
+         batch_size=policy_config["train_global_batch_size"],
+@@ -158,6 +170,8 @@
+         collate_fn=rl_collate_fn,
+         drop_last=True,
+         num_workers=data_config["num_workers"],
++        pin_memory=arc2_dataloader_pin_memory,
++        snapshot_every_n_steps=arc2_snapshot_every_n_steps,
+     )
+
+     if last_checkpoint_path is not None:
+--- a/nemo_rl/models/megatron/train.py
++++ b/nemo_rl/models/megatron/train.py
+@@ -12,6 +12,8 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+
++import os
++
+ from collections import defaultdict
+ from contextlib import nullcontext
+ from functools import partial
+@@ -27,7 +29,7 @@
+     get_tensor_model_parallel_rank,
+ )
+ from megatron.core.pipeline_parallel import get_forward_backward_func
+-from megatron.core.utils import StragglerDetector
++from megatron.core.utils import StragglerDetector, get_model_config
+
+ from nemo_rl.algorithms.logits_sampling_utils import (
+     TrainingSamplingParams,
+@@ -62,6 +64,11 @@
+ )
+ from nemo_rl.models.policy import PolicyConfig
+
++# ARC2_PRE_FINALIZE_EMPTY_CACHE_V2: retain the cache release on every step, but emit its per-rank
++# memory receipt only for the first two finalization calls in each worker.
++_ARC2_PRE_FINALIZE_LOG_COUNT = 0
++_ARC2_PRE_FINALIZE_LOG_LIMIT = 2
++
+ # Union type for any post-processing function (defined after classes below)
+ PostProcessingFunction = Union[
+     "LossPostProcessor",
+@@ -355,6 +362,57 @@
+     forward_backward_func = get_forward_backward_func()
+     if use_router_replay:
+         clear_router_replay(model)
++
++    # This wrapper executes inside the selected Megatron schedule,
++    # immediately before its gradient-finalization collectives. It is enabled
++    # only for an explicitly requested diagnostic job and restored afterward.
++    model_config = get_model_config(model)
++    original_finalize_model_grads = model_config.finalize_model_grads_func
++    pre_finalize_cache_release_enabled = (
++        os.environ.get("ARC2_NEMORL_EMPTY_CACHE_BEFORE_FINALIZE_GRADS") == "1"
++    )
++    if (
++        pre_finalize_cache_release_enabled
++        and original_finalize_model_grads is not None
++    ):
++
++        def finalize_model_grads_after_empty_cache(*args, **kwargs):
++            global _ARC2_PRE_FINALIZE_LOG_COUNT
++            should_log_receipt = (
++                _ARC2_PRE_FINALIZE_LOG_COUNT < _ARC2_PRE_FINALIZE_LOG_LIMIT
++            )
++            if should_log_receipt:
++                device = torch.cuda.current_device()
++                rank = (
++                    torch.distributed.get_rank()
++                    if torch.distributed.is_initialized()
++                    else -1
++                )
++                allocated_before = torch.cuda.memory_allocated(device)
++                reserved_before = torch.cuda.memory_reserved(device)
++                free_before, _ = torch.cuda.mem_get_info(device)
++            torch.cuda.empty_cache()
++            if should_log_receipt:
++                allocated_after = torch.cuda.memory_allocated(device)
++                reserved_after = torch.cuda.memory_reserved(device)
++                free_after, _ = torch.cuda.mem_get_info(device)
++                print(
++                    "[PRE_FINALIZE_EMPTY_CACHE] "
++                    f"rank={rank} device={device} "
++                    f"allocated_mb={allocated_before / (1024**2):.1f}"
++                    f"->{allocated_after / (1024**2):.1f} "
++                    f"reserved_mb={reserved_before / (1024**2):.1f}"
++                    f"->{reserved_after / (1024**2):.1f} "
++                    f"driver_free_mb={free_before / (1024**2):.1f}"
++                    f"->{free_after / (1024**2):.1f}",
++                    flush=True,
++                )
++                _ARC2_PRE_FINALIZE_LOG_COUNT += 1
++            return original_finalize_model_grads(*args, **kwargs)
++
++        model_config.finalize_model_grads_func = (
++            finalize_model_grads_after_empty_cache
++        )
+     try:
+         return forward_backward_func(
+             forward_step_func=forward_step,
+@@ -367,5 +425,7 @@
+             forward_only=forward_only,
+         )
+     finally:
++        if pre_finalize_cache_release_enabled:
++            model_config.finalize_model_grads_func = original_finalize_model_grads
+         if use_router_replay:
+             clear_router_replay(model)
