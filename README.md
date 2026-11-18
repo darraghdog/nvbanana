@@ -13,9 +13,9 @@ The [solution writeup](https://www.kaggle.com/competitions/arc-prize-2026-arc-ag
 
 The pipeline turns book pages into structured puzzle specifications, pairs them with ARC-AGI-2 training-task summaries, and generates and verifies input and output programs. The release example uses four augmented training rows per accepted base puzzle.
 
-![Four illustrated source categories: puzzles (Dudeney, Hoffmann, Loyd), recreational maths (Lucas, Rouse Ball, Laisant, MacMahon), toys and games (Falkener, Culin, Matthews), and engineering (Ramelli, Hero of Alexandria, Appletons’).](sdg/assets/book-inspiration-collage.jpg)
+![Archival portraits of Henry Dudeney, Professor Hoffmann, Sam Loyd, Édouard Lucas, W. W. Rouse Ball, Charles-Ange Laisant, Stewart Culin, and Agostino Ramelli.](sdg/assets/book-inspiration-collage.jpg)
 
-*Representative source authors and works. The figures are generated illustrations.*
+*Eight authors whose works inspired the puzzles. [Portrait credits](sdg/assets/portrait-credits.md).*
 
 The two Kaggle notebooks demonstrate this workflow on pages from Hoffmann's *Puzzles Old and New*.
 
