@@ -57,7 +57,18 @@ Transformer Engine, and the matching Transformers release. The
 [runtime pins](runtime.json) identify the NeMo RL and Megatron Bridge
 source checkouts and Transformers version. Make both pinned Git
 checkouts importable from the training environment. The driver checks
-the revisions of the imported source before it loads data.
+the revisions of the imported source before it loads data. The Megatron
+Bridge pin is the submodule recorded by this NeMo RL revision.
+
+```bash
+git clone --branch r0.7.0 https://github.com/NVIDIA-NeMo/RL.git /path/to/NeMo-RL
+git -C /path/to/NeMo-RL checkout 87f1dfb1f6e050ec1d8f9dc3a93dbe98ca763280
+bridge_path=3rdparty/Megatron-Bridge-workspace/Megatron-Bridge
+git -C /path/to/NeMo-RL submodule update --init --recursive "$bridge_path"
+bridge_root="/path/to/NeMo-RL/$bridge_path"
+export PYTHONPATH="/path/to/NeMo-RL:$bridge_root/src:$bridge_root/3rdparty/Megatron-LM${PYTHONPATH:+:$PYTHONPATH}"
+```
+
 [NeMo RL installation](https://docs.nvidia.com/nemo/rl/latest/about/installation.html) ·
 [NeMo RL SFT guide](https://docs.nvidia.com/nemo/rl/latest/guides/sft.html)
 
