@@ -139,6 +139,12 @@ logger:
   mlflow_enabled: false
   swanlab_enabled: false
   monitor_gpus: false
+  wandb:
+    project: arc16-smoke
+    name: hoffmann-smoke
+  gpu_monitoring:
+    collection_interval: 10
+    flush_interval: 60
 cluster:
   gpus_per_node: 4
   num_nodes: 1
