@@ -29,7 +29,12 @@ were checked against `arc-agi_training_challenges.json` from ARC-AGI-2
 [ARC-AGI-2 training data](https://github.com/arcprize/ARC-AGI-2/tree/f3283f727488ad98fe575ea6a5ac981e4a188e49/data/training) ·
 [Apache 2.0 license](https://github.com/arcprize/ARC-AGI-2/blob/f3283f727488ad98fe575ea6a5ac981e4a188e49/LICENSE)
 
-## Generate mixed specs
+## Continue to GPT-OSS generation
+
+The [Stage 2/3 and Stage 4 guide](../generation/README.md) takes `pairs.jsonl`
+directly into the combined GPT-OSS-120B pass with NeMo Skills.
+
+## Preview mixed specs
 
 Point `SDG_API_BASE` at an OpenAI-compatible Chat Completions server's API
 base (typically ending in `/v1`). Set `SDG_API_TOKEN` in the environment
@@ -43,6 +48,6 @@ python3 sdg/mixing/mix_puzzles.py generate outputs/pairs.jsonl \
 Each output includes the source IDs and a `mixed_spec` with seven fields.
 If the model returns malformed JSON or misses a field, the row has a null
 `mixed_spec` and retains the response for inspection. A successful row is a
-candidate rule. The next stage generates input code, tests the rule on grids,
-and keeps puzzles whose independently generated output programs agree.
+candidate rule for inspecting the mix before running the combined generation
+workflow.
 [Code generation and agreement demo](https://www.kaggle.com/code/darraghdog/book-spec-to-arc-puzzles-with-flash)

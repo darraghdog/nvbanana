@@ -18,7 +18,7 @@ The Hoffmann example begins with a challenge about arranging counters in rows. G
 
 ## Reproduce the two-input mix
 
-The [example inspiration outputs](sourcing/inspiration_outputs.jsonl) contain 240 Gemini Pro rule specs from four public-domain books. The [mixing guide](mixing/README.md) pairs these with NVARC-style ARC training summaries and generates new specs using the two-input layout used in INSP11.
+The [example inspiration outputs](sourcing/inspiration_outputs.jsonl) contain 240 Gemini Pro rule specs from four public-domain books. The [mixing guide](mixing/README.md) pairs these with NVARC-style ARC training summaries and generates new specs using the two-input layout used in INSP11. The [generation guide](generation/README.md) runs GPT-OSS-120B through NeMo Skills for Stage 2/3 and Stage 4, then keeps puzzles with exact output agreement.
 
 ## Kaggle demos
 

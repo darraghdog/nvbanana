@@ -1,0 +1,43 @@
+# NeMo Skills prompt for the combined two-input spec and input-code pass.
+user: |-
+  Design an ARC grid transformation using one idea from each input.
+
+  <puzzle_1>
+  {PUZZLE1}
+  </puzzle_1>
+
+  <puzzle_2>
+  {PUZZLE2}
+  </puzzle_2>
+
+  Use the ARC training summary (puzzle 1) for the primary rule. Use the book
+  inspiration (puzzle 2) for an object property, spatial operation, or
+  selection criterion. Change the layout and make one idea determine where
+  or how the other applies. Make both ideas discoverable from examples.
+
+  Define a seeded Python function generate_puzzle_input(seed) that returns
+  a rectangular list of lists of integers. Use only the Python standard
+  library, 1 to 30 cells per side, colours 0 to 9, and 0 as background.
+  Make the transform deterministic and specify tie handling. The generator
+  should vary parameters while keeping both ideas visible.
+
+  Use the stateful Python tool to prototype the input generator and the
+  intended output rule. Run on seeds 0 through 19. Verify grid dimensions,
+  colour range, deterministic behaviour, at least 10 distinct inputs and
+  outputs, and a visible transformation. Inspect examples to confirm that
+  the two ideas interact. Before finalizing, verify that the exact input
+  generator can run on its own in a fresh namespace.
+
+  In your final answer return only a <mixed_spec> block containing these
+  seven named tags, followed by one fenced Python block containing only
+  the standalone input code. Include any imports and helpers it needs.
+
+  <mixed_spec>
+  <rules_summary>What the puzzle does.</rules_summary>
+  <grid_constraints>Size, colours, and invariants.</grid_constraints>
+  <input_generation>How valid inputs are sampled.</input_generation>
+  <output_relationship>How the output relates to the input.</output_relationship>
+  <solution_steps>Complete deterministic transformation.</solution_steps>
+  <key_insight>Clue that reveals the rule.</key_insight>
+  <puzzle_concepts>Visual concepts required.</puzzle_concepts>
+  </mixed_spec>

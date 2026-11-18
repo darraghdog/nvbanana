@@ -1,0 +1,28 @@
+# Portable NeMo Skills prompt for independent output-code generation.
+user: |-
+  Implement the output rule for the following ARC puzzle.
+
+  <puzzle>
+  {PUZZLE}
+  </puzzle>
+
+  The input generator is below. Run it in the stateful Python tool to
+  inspect input examples. It returns a rectangular list of lists.
+
+  <input_code>
+  {INPUT_CODE}
+  </input_code>
+
+  Write generate_puzzle_output(input_grid) as a standalone Python function.
+  Use only the standard library. Return a rectangular list of lists of
+  integers, 1 to 30 cells per side, using colours 0 to 9. Apply the rule to
+  the grid itself. Keep it deterministic, with explicit tie handling.
+
+  Use the Python tool to test the exact output implementation on grids
+  from seeds 0 through 19. Check dimensions, colours, expected object
+  changes, variety and that repeated calls on the same input agree.
+  Inspect examples against the rule. Verify that the output code works
+  without access to the input generator.
+
+  Return one fenced Python block with only generate_puzzle_output and the
+  imports and helpers it needs.
