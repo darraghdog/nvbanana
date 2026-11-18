@@ -13,6 +13,8 @@ The [solution writeup](https://www.kaggle.com/competitions/arc-prize-2026-arc-ag
 
 The [SDG guide](sdg/README.md) shows how book ideas became verified ARC puzzles, with a worked Hoffmann example and two Kaggle demos. The [book sourcing guide](sdg/sourcing/README.md) contains the example bibliography and prompts. The [dataset builder](sdg/dataset/README.md) turns accepted puzzles into four augmented SFT rows each.
 
+![Book rules and ARC training summaries feed Stage 2/3 input generation, Stage 4 output verification, and the SFT dataset builder.](sdg/assets/sdg-stage-flow.png)
+
 ![Hoffmann’s counters puzzle becomes an ARC specification, tested generator code, and example input and output grids.](sdg/assets/hoffmann-book-to-arc.png)
 
 *From a counters puzzle in Hoffmann’s Puzzles Old and New (1893) to a generated ARC-AGI-2 task.*
