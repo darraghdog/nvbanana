@@ -119,7 +119,9 @@ run all three candidate programs independently on the same 30 grids.
 Keep only exact 3/3 agreement across the entire set, with valid grids,
 varied outputs, and at least one visible change. The resulting JSONL
 keeps the source IDs, mixed spec, generator code, all three agreeing
-programs and one ARC task with three demos and one test pair.
+programs, all 30 agreed `grid_pairs`, and one ARC task with three demos
+and one test pair. The [SFT dataset builder](../dataset/README.md) samples
+from the full pool of agreed pairs.
 
 ```bash
 check_generated filter-stg4 /run-data/stg4-input.jsonl /run-data/stg4 \

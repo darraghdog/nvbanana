@@ -168,9 +168,13 @@ def filter_stg4(inputs_path, samples_dir):
             print(f"Stage 4 pair {pair} rejected: {exc}", file=sys.stderr)
             continue
 
+        grid_pairs = [
+            {"input": input_grid, "output": output_grid}
+            for input_grid, output_grid in zip(grids, outputs)
+        ]
         examples = {}
-        for input_grid, output_grid in zip(grids, outputs):
-            examples.setdefault(grid_key(input_grid), {"input": input_grid, "output": output_grid})
+        for grid_pair in grid_pairs:
+            examples.setdefault(grid_key(grid_pair["input"]), grid_pair)
         examples = list(examples.values())
         print(json.dumps({
             **{key: row[key] for key in PROVENANCE},
@@ -179,6 +183,7 @@ def filter_stg4(inputs_path, samples_dir):
             "output_codes": codes,
             "stage4_seeds": list(OUTPUT_SEEDS),
             "consensus_grids": len(grids),
+            "grid_pairs": grid_pairs,
             "task": {"train": examples[:3], "test": examples[3:4]},
         }, ensure_ascii=False))
 

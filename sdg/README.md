@@ -27,4 +27,4 @@ The two notebooks show how to build examples from the same book.
 1. [Book to ARC specs with Gemini](https://www.kaggle.com/code/darraghdog/book-to-arc-specs-with-gemini) screens page images, extracts puzzle specs, and pairs them with ARC-AGI-2 training summaries.
 2. [Book spec to ARC puzzles with Flash](https://www.kaggle.com/code/darraghdog/book-spec-to-arc-puzzles-with-flash) generates testable input programs and checks output agreement. This demo uses Flash-Next for the generation stages shown with GPT-OSS-120B in the diagram.
 
-The release example uses four augmented training rows per accepted base puzzle.
+The [dataset builder](dataset/README.md) uses the agreed grid pairs to create four augmented SFT rows per accepted base puzzle. It includes a reproducible Hoffmann sample and a Hugging Face export for NeMo RL.
