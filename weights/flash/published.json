@@ -1,0 +1,204 @@
+{
+  "hash_source": "Archived upload payloads with file names and sizes verified against Kaggle model versions 1",
+  "parts": {
+    "part1": {
+      "files": {
+        "README.md": {
+          "bytes": 3950,
+          "sha256": "2ced707ea69397a8993ab4a9d9a7b0aee4bc046dd7e393b3f8341ab0177b516f"
+        },
+        "chat_template.jinja": {
+          "bytes": 8952,
+          "sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041"
+        },
+        "config.json": {
+          "bytes": 30819,
+          "sha256": "c1a936c95dfe06a4fbb34b5b53a2f8e402c8456c93ee1729e700d8364560c284"
+        },
+        "generation_config.json": {
+          "bytes": 202,
+          "sha256": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e"
+        },
+        "hf_quant_config.json": {
+          "bytes": 23000,
+          "sha256": "7555eed874db13d29540e696c40a987af925c08b1f8855b29a3099fe6250dc7f"
+        },
+        "merges.txt": {
+          "bytes": 3353259,
+          "sha256": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d"
+        },
+        "model-00001-of-00030.safetensors": {
+          "bytes": 4003818168,
+          "sha256": "d82b7061020072e3bfaff751d3b84241e7327cc8c0bc26cdeffd688cffac04c7"
+        },
+        "model-00002-of-00030.safetensors": {
+          "bytes": 4000531400,
+          "sha256": "504cea452436f51afec027f1857754f039145c65b9bff95ac9064f8c0a035f1e"
+        },
+        "model-00003-of-00030.safetensors": {
+          "bytes": 4003155168,
+          "sha256": "df79e1ccda788bcaf7e2faf3e4bfce0ad5ed303540ccc04016af061b95f365e8"
+        },
+        "model-00004-of-00030.safetensors": {
+          "bytes": 4000004664,
+          "sha256": "b2825d216e17fe601c0d09d60f000a06ae1a554b1e8c639f6ea350a9a7eb87fd"
+        },
+        "model-00005-of-00030.safetensors": {
+          "bytes": 4003010656,
+          "sha256": "48dc29109a34abbac4638bbb76d63f50e03a1bf8f100ae2f19a8baf9fbe82185"
+        },
+        "model-00006-of-00030.safetensors": {
+          "bytes": 3997259872,
+          "sha256": "3f70e7f28a2cf07b8cdb0dc63cef10832ee7016dcf00b7cdf1b568a935101260"
+        },
+        "model-00007-of-00030.safetensors": {
+          "bytes": 4000665368,
+          "sha256": "f7eec818b7a5d42cc8002bdeb88f8e1f2fdd058f6d091c724790e17fb503d9a9"
+        },
+        "model-00008-of-00030.safetensors": {
+          "bytes": 4002536640,
+          "sha256": "0601ca728e8d9cad2d49d0f3c967d120d178955364c88a955351e9d514635595"
+        },
+        "model-00009-of-00030.safetensors": {
+          "bytes": 4001024584,
+          "sha256": "347bfd700f22dc9f67d5711858ed8da13b6303420d198a19bae1a58fa8588257"
+        },
+        "model-00010-of-00030.safetensors": {
+          "bytes": 4002632040,
+          "sha256": "f4275310914e43a4d400ef74b2e5bfd2e3cd5a52623ee9ba976c9a57b1c950ab"
+        },
+        "model-00011-of-00030.safetensors": {
+          "bytes": 4000005680,
+          "sha256": "aac4f10ed82c1f74d5ecf620a525d68056523dcc52a9a53f6dbd9956407466a4"
+        },
+        "model-00012-of-00030.safetensors": {
+          "bytes": 4002651512,
+          "sha256": "c3c0d8ad22cd74713fdeed4ab79a96f1275b989d08f63dd3676944b68586c131"
+        },
+        "model-00013-of-00030.safetensors": {
+          "bytes": 4000005456,
+          "sha256": "93c89c9f1fe8ace5b231e2abf22e8df1f1b83d572035fd9afa59b4d6566ffa99"
+        },
+        "model-00014-of-00030.safetensors": {
+          "bytes": 3997881520,
+          "sha256": "7ad82dd22d499276622f709939555b8aa1fe3dc9a30a1012d4e4658b270272e7"
+        },
+        "model-00015-of-00030.safetensors": {
+          "bytes": 3662820626,
+          "sha256": "4b1345a8e2f7509c0ddefe4a9bf20780c024d131339669fe7eb38a9aa3d01b2e"
+        },
+        "model.safetensors.index.json": {
+          "bytes": 22864172,
+          "sha256": "0e33e0e90cc22a5d83d4dbd33b5e87a5b13d7d9dd00e59fafac52c7d2841fcc9"
+        },
+        "preprocessor_config.json": {
+          "bytes": 390,
+          "sha256": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516"
+        },
+        "processor_config.json": {
+          "bytes": 1191,
+          "sha256": "d89ef49ce9cd37fbf510158e13c1ef063d9286411c1ec9049932dbe0487143b1"
+        },
+        "prune_keepset.json": {
+          "bytes": 81504,
+          "sha256": "a8370528a3724021311256f07881291b75e48c9b811763328ceeedb10c82c379"
+        },
+        "sitecustomize.py": {
+          "bytes": 6471,
+          "sha256": "5164023bf7488e6665840bb56fb2fb236f2a464a4bf1a5fc34fbc7e556edaa10"
+        },
+        "tokenizer.json": {
+          "bytes": 12809320,
+          "sha256": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3"
+        },
+        "tokenizer_config.json": {
+          "bytes": 17928,
+          "sha256": "b11349aafa7cdc6a320767cf7ceb29ed82f7eda5d65e8e0819e76f0ce947bf27"
+        },
+        "video_preprocessor_config.json": {
+          "bytes": 385,
+          "sha256": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13"
+        },
+        "vocab.json": {
+          "bytes": 6722759,
+          "sha256": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003"
+        }
+      },
+      "kaggle_model_version": "darraghdog/qwen3-8-flash-next-nvfp4-reap-po352/Transformers/nvfp4-po352-kaggle-4gb-part1/1"
+    },
+    "part2": {
+      "files": {
+        "model-00016-of-00030.safetensors": {
+          "bytes": 3600018776,
+          "sha256": "277c2ac6f10526f55dd820744c80a697363b2c0cddfc33cfedc8baad84e05fd6"
+        },
+        "model-00017-of-00030.safetensors": {
+          "bytes": 3600018776,
+          "sha256": "24ad92ed85ef5a9a69d94fbcb934d68206ccf772f390a91d6c0cc469495bceaf"
+        },
+        "model-00018-of-00030.safetensors": {
+          "bytes": 3600018776,
+          "sha256": "0861fd79ce2e36e24fad5edac566198022efd3d54f24487932e13219492ee68d"
+        },
+        "model-00019-of-00030.safetensors": {
+          "bytes": 3600018776,
+          "sha256": "7078d76846121a2a51f7e51819e8a1cfa07047819edc554aca46a410630fd5ba"
+        },
+        "model-00020-of-00030.safetensors": {
+          "bytes": 3600018776,
+          "sha256": "d5b3e2acb999fd2260012726a7d0b0f585b10ff94ca1d2f5efe04fe858a09590"
+        },
+        "model-00021-of-00030.safetensors": {
+          "bytes": 3600018776,
+          "sha256": "6b658c6a417622a4fd9c8a06c65453c570c53c456758df81f4479c5d38262ab3"
+        },
+        "model-00022-of-00030.safetensors": {
+          "bytes": 3600018776,
+          "sha256": "7209655ecd82ee03a11864e7d7cf1a6b8638a5d1b641a87e7afeb7b8bfeb8639"
+        },
+        "model-00023-of-00030.safetensors": {
+          "bytes": 3600018776,
+          "sha256": "360820bc92d313b5c9d66fdfd0991267ce0f6124efaf90458a0e2eae2fccfdbf"
+        },
+        "model-00024-of-00030.safetensors": {
+          "bytes": 3600018776,
+          "sha256": "f46d7a6d32ee9ac77bd479f70a2da95c03a05c9113f4163b3787011f5e0e09dc"
+        },
+        "model-00025-of-00030.safetensors": {
+          "bytes": 3600018776,
+          "sha256": "6e03e07f32324504439e50d76a06276a0e0658db40207cfb334d24573749f0c4"
+        },
+        "model-00026-of-00030.safetensors": {
+          "bytes": 3600018784,
+          "sha256": "3ab48f83d418ea124192e1ead0eda1b44de8da434113428691d148a20a425f64"
+        },
+        "model-00027-of-00030.safetensors": {
+          "bytes": 3600018784,
+          "sha256": "f052156b6999dafb12bc2367d47f4411f1c014852551c84df0dc64b8b9613934"
+        },
+        "model-00028-of-00030.safetensors": {
+          "bytes": 3600018784,
+          "sha256": "17b032a6142e63c1b6a7b492c6411d906fde08f2885f4c01e8dc775d06fc5ee9"
+        },
+        "model-00029-of-00030.safetensors": {
+          "bytes": 3999548416,
+          "sha256": "f5dc1716ab3e7a5c4fedfc4e3fd9643074d1dff961c1ec4c96d3c24549376a2d"
+        },
+        "model-00030-of-00030.safetensors": {
+          "bytes": 917739424,
+          "sha256": "0b8b5b20c3808b1f6e4225bc490d3393001d17485928cc082cd8e82288d0dc79"
+        }
+      },
+      "kaggle_model_version": "darraghdog/qwen3-8-flash-next-nvfp4-reap-po352/Transformers/nvfp4-po352-kaggle-4gb-part2/1"
+    }
+  },
+  "source": {
+    "model": "lee-chang-93/Qwen3.8-Flash-Next-NVFP4-REAP-k448",
+    "revision": "8d565c90add22b39cf3632943f859d7a9a411b48",
+    "sha256": {
+      "config.json": "ad61c42bc31e9f4b2d9e8352364a8838033e8fdc5a554f063db89c25df0a0329",
+      "model.safetensors.index.json": "8289de04b7771576bb7b99e8f5a7e9be238afec02a093d68f9305505417a5508"
+    }
+  },
+  "tensor_count": 207385
+}
