@@ -8,6 +8,7 @@ __pycache__/
 kaggle.json
 
 /data/
+/models/
 /artifacts/
 /checkpoints/
 /outputs/

@@ -96,3 +96,14 @@ to the digit-grid chat format. The smoke config disables checkpoint
 writes, validation, and external logging. For a longer run, pass a
 separate `--config` with the training schedule, hardware topology,
 validation settings, and checkpoint interval for your data.
+
+## Verification
+
+A full build from the pinned Qwen snapshot produced the same tensor
+inventory and byte-identical ARC-16 input and output matrices as the
+production base. The pinned NeMo RL formatter preserved all grid cells
+and role markers in the four Hoffmann rows. The smoke config completed
+one BF16 SFT update on four GB300 GPUs with loss 1.2720.
+
+Use a short node-local `RAY_TMPDIR` if overriding Ray's temporary
+directory. Ray uses this path for its Unix sockets.
