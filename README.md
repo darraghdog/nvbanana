@@ -32,3 +32,5 @@ The baseline uses per-puzzle LoRA test-time fine-tuning followed by SGLang sampl
 
 - [Qwen3.8-27B baseline notebook](https://www.kaggle.com/code/darraghdog/fast-v18-insp4-to-16-ep1-6-ttft32-s48-symlink?scriptVersionId=361158513)
 - [Qwen3.8-27B and Flash-Next blend notebook](https://www.kaggle.com/code/darraghdog/blend-v18-27b-text-po358-fnt07cs72)
+
+The [inference instructions](inference/README.md) list the notebook snapshots and versioned dependencies.

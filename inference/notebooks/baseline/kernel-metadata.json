@@ -1,0 +1,32 @@
+{
+  "id": "darraghdog/fast-v18-insp4-to-16-ep1-6-ttft32-s48-symlink",
+  "id_no": 140215964,
+  "title": "fast_v18_insp4_to_16 ep1-6 ttft32 s48 symlink ",
+  "code_file": "fast-v18-insp4-to-16-ep1-6-ttft32-s48-symlink.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "gpu"
+  ],
+  "dataset_sources": [
+    "darraghdog/arc2-ttft27b-runtime",
+    "cpmpml/qwen-3-tokenizer-fix",
+    "darraghdog/qwen38-27b-src11plus16abcd-step188222-gptq-mixed"
+  ],
+  "kernel_sources": [
+    "cpmpml/pip-dowload-flash",
+    "darraghdog/pip-dowload-flash-sglang",
+    "darraghdog/sgl-jit-cache-l4-gptq-27b",
+    "packagemanager/pm-140215964-at-10-22-2026-13-58-45"
+  ],
+  "competition_sources": [
+    "arc-prize-2026-arc-agi-2"
+  ],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:2757e0c7d1e0a9cb43da657b97e223c321a98f5014bdf64f44f2f6b083ad2b2f",
+  "machine_shape": "NvidiaL4"
+}

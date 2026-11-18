@@ -1,0 +1,37 @@
+{
+  "id": "darraghdog/blend-v18-27b-text-po358-fnt07cs72",
+  "id_no": 141293404,
+  "title": "blend__v18_27B_text__po358_fnt07cs72",
+  "code_file": "blend-v18-27b-text-po358-fnt07cs72.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "gpu"
+  ],
+  "dataset_sources": [
+    "darraghdog/arc2-ttft27b-runtime",
+    "darraghdog/flash-harness-fnt07cs72-r1027",
+    "darraghdog/flash-vllm-runtime-r1026b",
+    "cpmpml/qwen-3-tokenizer-fix",
+    "darraghdog/qwen38-27b-src11plus16abcd-step188222-gptq-mixed"
+  ],
+  "kernel_sources": [
+    "cpmpml/pip-dowload-flash",
+    "darraghdog/pip-dowload-flash-sglang",
+    "darraghdog/sgl-jit-cache-l4-gptq-27b",
+    "packagemanager/pm-141293404-at-10-28-2026-09-30-47"
+  ],
+  "competition_sources": [
+    "arc-prize-2026-arc-agi-2"
+  ],
+  "model_sources": [
+    "darraghdog/qwen3-8-flash-next-nvfp4-reap-po352/Transformers/nvfp4-po352-kaggle-4gb-part2/1",
+    "darraghdog/qwen3-8-flash-next-nvfp4-reap-po352/Transformers/nvfp4-po352-kaggle-4gb-part1/1"
+  ],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:2757e0c7d1e0a9cb43da657b97e223c321a98f5014bdf64f44f2f6b083ad2b2f",
+  "machine_shape": "NvidiaL4"
+}

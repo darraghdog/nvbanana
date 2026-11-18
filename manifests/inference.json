@@ -1,0 +1,180 @@
+{
+  "checked_on": "2026-11-18",
+  "competition": {
+    "slug": "arc-prize-2026-arc-agi-2",
+    "input_path": "/kaggle/input/competitions/arc-prize-2026-arc-agi-2",
+    "provisioning": "Through Kaggle after accepting the competition terms."
+  },
+  "hardware": {
+    "gpu": "NVIDIA L4",
+    "count": 4,
+    "internet": false,
+    "output": "/kaggle/working/submission.json"
+  },
+  "notebooks": [
+    {
+      "name": "baseline",
+      "kaggle_submission_id": 57535591,
+      "kaggle_notebook_id": 140215964,
+      "kaggle_notebook": "darraghdog/fast-v18-insp4-to-16-ep1-6-ttft32-s48-symlink",
+      "script_version_id": 361158513,
+      "version_evidence": "Script version from the original fast-v18 v5 run record. The current Kaggle pull has identical cell sources to the saved ARC2 s48 snapshot. The selected-submissions API does not expose the submission-to-version binding.",
+      "notebook": "inference/notebooks/baseline/fast-v18-insp4-to-16-ep1-6-ttft32-s48-symlink.ipynb",
+      "metadata": "inference/notebooks/baseline/kernel-metadata.json",
+      "docker_image": "gcr.io/kaggle-private-byod/python@sha256:2757e0c7d1e0a9cb43da657b97e223c321a98f5014bdf64f44f2f6b083ad2b2f",
+      "dataset_sources": [
+        "darraghdog/arc2-ttft27b-runtime",
+        "cpmpml/qwen-3-tokenizer-fix",
+        "darraghdog/qwen38-27b-src11plus16abcd-step188222-gptq-mixed"
+      ],
+      "kernel_sources": [
+        "cpmpml/pip-dowload-flash",
+        "darraghdog/pip-dowload-flash-sglang",
+        "darraghdog/sgl-jit-cache-l4-gptq-27b",
+        "packagemanager/pm-140215964-at-10-22-2026-13-58-45"
+      ],
+      "model_sources": []
+    },
+    {
+      "name": "blend",
+      "kaggle_submission_id": 57744045,
+      "kaggle_notebook_id": 141293404,
+      "kaggle_notebook": "darraghdog/blend-v18-27b-text-po358-fnt07cs72",
+      "script_version_id": null,
+      "version_evidence": "The historical pulled_v5 snapshot of notebook 141293404, committed to ARC2 at b633842. The original slug returned HTTP 404 on the authenticated Kaggle pull. The owner account could list output files for this slug. The API did not return the selected submission’s script version.",
+      "notebook": "inference/notebooks/blend/blend-v18-27b-text-po358-fnt07cs72.ipynb",
+      "metadata": "inference/notebooks/blend/kernel-metadata.json",
+      "docker_image": "gcr.io/kaggle-private-byod/python@sha256:2757e0c7d1e0a9cb43da657b97e223c321a98f5014bdf64f44f2f6b083ad2b2f",
+      "dataset_sources": [
+        "darraghdog/arc2-ttft27b-runtime",
+        "darraghdog/flash-harness-fnt07cs72-r1027",
+        "darraghdog/flash-vllm-runtime-r1026b",
+        "cpmpml/qwen-3-tokenizer-fix",
+        "darraghdog/qwen38-27b-src11plus16abcd-step188222-gptq-mixed"
+      ],
+      "kernel_sources": [
+        "cpmpml/pip-dowload-flash",
+        "darraghdog/pip-dowload-flash-sglang",
+        "darraghdog/sgl-jit-cache-l4-gptq-27b",
+        "packagemanager/pm-141293404-at-10-28-2026-09-30-47"
+      ],
+      "model_sources": [
+        "darraghdog/qwen3-8-flash-next-nvfp4-reap-po352/Transformers/nvfp4-po352-kaggle-4gb-part2/1",
+        "darraghdog/qwen3-8-flash-next-nvfp4-reap-po352/Transformers/nvfp4-po352-kaggle-4gb-part1/1"
+      ]
+    }
+  ],
+  "datasets": {
+    "darraghdog/arc2-ttft27b-runtime": {
+      "dataset_id": 12492442,
+      "version": 3,
+      "version_evidence": "Kaggle reports this as the current version. The version timestamp predates the relevant submission; the notebook metadata names only the dataset slug.",
+      "visibility": "public",
+      "required_for_reproduction": true,
+      "purpose": "TTFT runtime and helpers",
+      "url": "https://www.kaggle.com/datasets/darraghdog/arc2-ttft27b-runtime/versions/3"
+    },
+    "darraghdog/qwen38-27b-src11plus16abcd-step188222-gptq-mixed": {
+      "dataset_id": 12781383,
+      "version": 1,
+      "version_evidence": "Kaggle reports this as the current version. The version timestamp predates the relevant submission; the notebook metadata names only the dataset slug.",
+      "visibility": "public",
+      "required_for_reproduction": true,
+      "purpose": "Step 188222 GPTQ weights, split-half configs, and the tokenizer used by TTFT and SGLang",
+      "url": "https://www.kaggle.com/datasets/darraghdog/qwen38-27b-src11plus16abcd-step188222-gptq-mixed/versions/1"
+    },
+    "cpmpml/qwen-3-tokenizer-fix": {
+      "dataset_id": 11572834,
+      "version": 1,
+      "version_evidence": "Kaggle reports this as the current version. The version timestamp predates the relevant submission; the notebook metadata names only the dataset slug.",
+      "visibility": "private",
+      "required_for_reproduction": false,
+      "purpose": "Historical attachment. The baseline code uses the GPTQ tokenizer. The blend uses the same GPTQ path for its 27B stage.",
+      "url": "https://www.kaggle.com/datasets/cpmpml/qwen-3-tokenizer-fix/versions/1"
+    },
+    "darraghdog/flash-harness-fnt07cs72-r1027": {
+      "dataset_id": 12903216,
+      "version": 2,
+      "version_evidence": "Kaggle reports this as the current version. The version timestamp predates the relevant submission; the notebook metadata names only the dataset slug.",
+      "visibility": "public",
+      "required_for_reproduction": true,
+      "purpose": "Flash launch and merge support, cs72 harness tree, settings, sandbox, and Flash tokenizer",
+      "url": "https://www.kaggle.com/datasets/darraghdog/flash-harness-fnt07cs72-r1027/versions/2",
+      "archived_entry_points": [
+        "inference/flash/flash_kaggle_run.py",
+        "inference/flash/flash_rule_a.py"
+      ]
+    },
+    "darraghdog/flash-vllm-runtime-r1026b": {
+      "dataset_id": 12876500,
+      "version": 1,
+      "version_evidence": "Kaggle reports this as the current version. The version timestamp predates the relevant submission; the notebook metadata names only the dataset slug.",
+      "visibility": "public",
+      "required_for_reproduction": true,
+      "purpose": "Five runtime parts. Python 3.12.11, vLLM nightly 29468dde with overlay and prefix-cache fix.",
+      "url": "https://www.kaggle.com/datasets/darraghdog/flash-vllm-runtime-r1026b/versions/1",
+      "upstream_checksums": "manifests/flash-runtime-r1026.sha256"
+    }
+  },
+  "kernel_outputs": {
+    "cpmpml/pip-dowload-flash": {
+      "notebook_visibility": "public",
+      "metadata_access_from_release_account": "accessible",
+      "output_verified": false,
+      "version": null,
+      "purpose": "FlashAttention wheel for the base notebook",
+      "output_list_access_from_release_account": "listed",
+      "example_outputs": [
+        "flash_attn-2.8.3+cu128torch2.11-cp313-cp313-linux_x86_64.whl"
+      ]
+    },
+    "darraghdog/pip-dowload-flash-sglang": {
+      "notebook_visibility": "public",
+      "metadata_access_from_release_account": "accessible",
+      "output_verified": false,
+      "version": null,
+      "purpose": "SGLang wheel bundle",
+      "output_list_access_from_release_account": "listed",
+      "example_outputs": [
+        "flash_attn-2.8.3+cu128torch2.11-cp313-cp313-linux_x86_64.whl",
+        "wheels/aiohappyeyeballs-2.7.1-py3-none-any.whl"
+      ]
+    },
+    "darraghdog/sgl-jit-cache-l4-gptq-27b": {
+      "notebook_visibility": "public",
+      "metadata_access_from_release_account": "accessible",
+      "output_verified": false,
+      "version": null,
+      "purpose": "SGLang JIT cache for the L4 GPTQ checkpoint",
+      "output_list_access_from_release_account": "listed",
+      "example_outputs": [
+        "build_cache.log",
+        "build_cache.py"
+      ]
+    },
+    "packagemanager/pm-140215964-at-10-22-2026-13-58-45": {
+      "notebook_visibility": "public",
+      "metadata_access_from_release_account": "accessible",
+      "output_verified": false,
+      "version": null,
+      "purpose": "Kaggle Package Manager dependency output for the recorded image",
+      "output_list_access_from_release_account": "listed",
+      "example_outputs": [
+        "accelerate-1.15.0-py3-none-any.whl",
+        "aiohappyeyeballs-2.7.1-py3-none-any.whl"
+      ]
+    },
+    "packagemanager/pm-141293404-at-10-28-2026-09-30-47": {
+      "notebook_visibility": "public",
+      "metadata_access_from_release_account": "accessible",
+      "output_verified": false,
+      "version": null,
+      "purpose": "Kaggle Package Manager dependency output for the recorded image",
+      "output_list_access_from_release_account": "listed",
+      "example_outputs": [
+        "accelerate-1.15.0-py3-none-any.whl",
+        "aiohappyeyeballs-2.7.1-py3-none-any.whl"
+      ]
+    }
+  }
+}
