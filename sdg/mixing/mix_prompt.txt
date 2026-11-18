@@ -1,0 +1,32 @@
+Design a new ARC grid transformation using one rule idea from each input.
+
+<puzzle_1>
+{PUZZLE1}
+</puzzle_1>
+
+<puzzle_2>
+{PUZZLE2}
+</puzzle_2>
+
+Use the first puzzle for the primary transformation and the second for a
+selection criterion, spatial operation, or object property. Make the two
+ideas interact. One should determine where, when, or how the other applies.
+Change the layout and objects so the result is a new puzzle.
+
+Both grids must be rectangular, 1 to 30 cells per side, with integer colours
+0 to 9 and background colour 0. Specify a deterministic output rule with
+explicit tie handling. Use visual evidence in the grid so a solver can infer
+the rule from two to five examples without knowing the source puzzle.
+Describe how to generate varied valid inputs and reject degenerate cases
+that hide either concept.
+
+Return only one JSON object with these seven keys. Give each key a nonempty
+string value. Use plain text inside the strings.
+
+- rules_summary
+- grid_constraints
+- input_generation
+- output_relationship
+- solution_steps
+- key_insight
+- puzzle_concepts

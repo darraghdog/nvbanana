@@ -16,6 +16,10 @@ The Hoffmann example begins with a challenge about arranging counters in rows. G
 
 *From a counters puzzle in [Hoffmann’s Puzzles Old and New (1893), p. 267](https://archive.org/details/puzzlesoldnew00hoff) to an ARC-AGI-2 task.*
 
+## Reproduce the two-input mix
+
+The [example inspiration outputs](sourcing/inspiration_outputs.jsonl) contain 240 Gemini Pro rule specs from four public-domain books. The [mixing guide](mixing/README.md) pairs these with NVARC-style ARC training summaries and generates new specs using the two-input layout used in INSP11.
+
 ## Kaggle demos
 
 The two notebooks show how to build examples from the same book.
