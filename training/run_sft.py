@@ -1,13 +1,12 @@
 """Train the ARC-16 Qwen3.8 text model with NeMo RL and Megatron."""
 
 import argparse
+from importlib.util import find_spec
 from pathlib import Path
 import re
 import subprocess
 
 from datasets import load_from_disk
-import megatron.bridge
-import nemo_rl
 from nemo_rl.algorithms.sft import MasterConfig, setup, sft_train
 from nemo_rl.algorithms.utils import get_tokenizer
 from nemo_rl.data.datasets import AllTaskProcessedDataset
@@ -28,8 +27,11 @@ HERE = Path(__file__).resolve().parent
 
 def verify_runtime():
     pins = read_json(HERE / "runtime.json")
-    for package, name in ((nemo_rl, "nemo_rl"), (megatron.bridge, "megatron_bridge")):
-        path = Path(package.__file__).resolve().parent
+    for module, name in (("nemo_rl", "nemo_rl"), ("megatron.bridge", "megatron_bridge")):
+        package = find_spec(module)
+        if package is None or package.origin is None:
+            raise ValueError(f"Missing pinned source package: {module}")
+        path = Path(package.origin).resolve().parent
         revision = subprocess.check_output(["git", "-C", str(path), "rev-parse", "HEAD"], text=True).strip()
         if revision != pins[name]:
             raise ValueError(f"{name} expected {pins[name]}, got {revision}")
