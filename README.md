@@ -13,10 +13,18 @@ The [solution writeup](https://www.kaggle.com/competitions/arc-prize-2026-arc-ag
 
 The pipeline turns book pages into structured puzzle specifications, pairs them with ARC-AGI-2 training-task summaries, and generates and verifies input and output programs. The release example uses four augmented training rows per accepted base puzzle.
 
+![Four illustrated source categories: puzzles (Dudeney, Hoffmann, Loyd), recreational maths (Lucas, Rouse Ball, Laisant, MacMahon), toys and games (Falkener, Culin, Matthews), and engineering (Ramelli, Hero of Alexandria, Appletons’).](sdg/assets/book-inspiration-collage.jpg)
+
+*Representative source authors and works. The figures are generated illustrations.*
+
 The two Kaggle notebooks demonstrate this workflow on pages from Hoffmann's *Puzzles Old and New*.
 
 1. [Book to ARC specs with Gemini](https://www.kaggle.com/code/darraghdog/book-to-arc-specs-with-gemini)
 2. [Book spec to ARC puzzles with Flash](https://www.kaggle.com/code/darraghdog/book-spec-to-arc-puzzles-with-flash)
+
+![A book puzzle about counters on intersecting lines becomes an ARC specification, tested generator code, and example input and output grids.](sdg/assets/hoffmann-book-to-arc.png)
+
+*Hoffmann’s counters puzzle became an ARC-AGI-2 task about line crossings. [Puzzles Old and New (1893), p. 267](https://archive.org/details/puzzlesoldnew00hoff).*
 
 ## Model Training
 
