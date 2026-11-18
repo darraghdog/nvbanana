@@ -52,7 +52,7 @@ def make_plan(source, spec):
     for name, shard in weight_map.items():
         by_shard.setdefault(shard, set()).add(name)
     expected = spec["tensor_stats"]
-    if len(by_shard) != expected["source_shards"] or len(weight_map) != expected["source_tensor_count"]:
+    if set(by_shard) != set(expected["source_shards"]) or len(weight_map) != expected["source_tensor_count"]:
         raise ValueError("Unexpected source tensor inventory")
 
     plan = {}
