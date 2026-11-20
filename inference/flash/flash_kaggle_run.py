@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
-"""Run Flash-Next REAP448 on a set of ARC tasks inside a Kaggle 4xL4 notebook, next to the 4B book's environment (r1026).
+"""Run Flash-Next po352 on a set of ARC tasks inside a Kaggle 4xL4 notebook, next to the notebook's own environment.
 
-Standard library only, so the notebook's own Python (the 4B image) can run it. Everything heavy runs in subprocesses with the
-portable runtime from the private dataset darraghdog/flash-vllm-runtime (CPython 3.12 + vLLM nightly 29468dde + overlay +
-PR #50551 with the keep fix, torch 2.13 cu130), so nothing in the 4B environment changes.
+Standard library only, so the notebook's own Python (the Kaggle image) can run it. Everything heavy runs in subprocesses with the
+portable runtime from the dataset darraghdog/flash-vllm-runtime-r1026b (CPython 3.12 + vLLM nightly 29468dde + overlay +
+PR #50551 with the keep fix, torch 2.13 cu130), so nothing in the notebook environment changes.
 
 Steps: unpack the runtime to /kaggle/tmp/flash; write harness rows for the chosen tasks (expected_answer "" when there are no
-solutions, which the harness scores as 0); start the vLLM server with the ComputeLab L4 "Z'" recipe (TP2xPP2 + EP, NVFP4 via
+solutions, which the harness scores as 0); start the vLLM server with the L4 serving recipe (TP2xPP2 + EP, NVFP4 via
 Marlin, FP8 KV, bf16 Mamba state, align prefix caching, PLE + embed_tokens on CPU, FP8 indexer KV, native CPU KV offload,
-decode checkpoints); run the fnt07cs48 harness at --seats; stop at --deadline; write answers.json (per task, per test input,
+decode checkpoints); run the harness at --seats; stop at --deadline; write answers.json (per task, per test input,
 per sample: answer grid text and whether it was an auto answer, i.e. check() passed) next to the raw records.
 
-    python flash_kaggle_run.py --runtime /kaggle/input/flash-vllm-runtime/flash-runtime-r1026.tar.gz \
-        --harness /kaggle/input/.../flash-harness-fnt07cs48-r1026 --model /kaggle/input/models/.../nvfp4-reap-k448/2 \
-        --challenges .../arc-agi_evaluation_challenges.json --solutions .../arc-agi_evaluation_solutions.json \
-        --keys .../flash-harness-fnt07cs48-r1026/hard60_keys_r1022.json --out /kaggle/working/flash --deadline <unix time>
+The blend notebook runs it with --pools (rule A, see flash_rule_a.py) and --setting ov_l4_fnt07cs72_a, for example:
+
+    python flash_kaggle_run.py --runtime /kaggle/input/.../flash-runtime-r1026.part-00 \
+        --harness /kaggle/input/.../flash-harness-fnt07cs72-r1027 --model /kaggle/tmp/po352_nvfp4 \
+        --challenges .../arc-agi_test_challenges.json --setting ov_l4_fnt07cs72_a \
+        --keys <out>/keys.json --pools <out>/pools.json --out <out> --deadline <unix time>
 """
 
 from __future__ import annotations
@@ -268,7 +270,7 @@ def main() -> None:
     ap.add_argument("--client-minutes", type=float, default=0, help="stop the client this many minutes after the server is up (debug A/B)")
     ap.add_argument("--load", default="prefetch", choices=["prefetch", "eager", "lazy", "default"], help="safetensors load strategy")
     ap.add_argument("--load-threads", type=int, default=16, help="parallel readers for --load prefetch")
-    ap.add_argument("--pools", type=Path, default=None, help="r1027 rule A: base-model candidate pools {task_i: [[grid, votes], ...]}; "
+    ap.add_argument("--pools", type=Path, default=None, help="rule A: base-model candidate pools {task_i: [[grid, votes], ...]}; "
                     "runs flash_rule_a.py (per-task requeue until settled) instead of a fixed --samples harness run")
     ap.add_argument("--max-attempts", type=int, default=16, help="rule A: attempts per task at most")
     args = ap.parse_args()
@@ -300,7 +302,7 @@ def main() -> None:
                "--setting", args.setting, "--shard", "0", "--nshards", "1", "--samples", str(args.samples),
                "--concurrency", str(args.seats), "--sandbox-workers", "24", "--python", str(sbpy), "--probe",
                "--server-tokenizer", args.model]
-        if args.pools:   # r1027 rule A: same server, harness and records; per-task requeue instead of a fixed sample count
+        if args.pools:   # rule A: same server, harness and records; per-task requeue instead of a fixed sample count
             cmd = [str(py), str(Path(__file__).resolve().parent / "flash_rule_a.py"), "--base-url", f"http://127.0.0.1:{PORT}/v1",
                    "--tokenizer", str(args.harness / "tokenizer"), "--data", str(rows), "--out", str(args.out / "shard0.jsonl"),
                    "--setting", args.setting, "--seats", str(args.seats), "--sandbox-workers", "24", "--python", str(sbpy),

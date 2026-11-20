@@ -17,6 +17,8 @@ Verify the archived files from the repo root.
 shasum -a 256 -c manifests/inference.sha256
 ```
 
+For this release, internal names and run tags were removed from comments and docstrings in the two notebooks and the two Flash entry points. Their code is unchanged. [`inference-submitted.sha256`](../manifests/inference-submitted.sha256) keeps the checksums of the files as submitted and as stored in the Kaggle harness dataset.
+
 ## Inputs
 
 Use four NVIDIA L4 GPUs and disable internet for inference. Attach the ARC Prize 2026 competition data through Kaggle. The notebooks write `/kaggle/working/submission.json`.

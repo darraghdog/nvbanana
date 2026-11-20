@@ -25,7 +25,7 @@ These are three examples from the source collection. The archive links identify 
 | [Dudeney, *The Canterbury Puzzles*, second edition (1919)](https://archive.org/details/canterburypuzzle00dudeuoft) | 60 | [Project Gutenberg second edition](https://www.gutenberg.org/files/27635/27635-h/27635-h.htm) |
 | [Laisant, *Initiation mathématique* (1906)](https://archive.org/details/initiationmathm00laisgoog) | 60 | The scan identifies the work as public domain. [Publication record](https://books.google.com/books/about/Initiation_math%C3%A9matique.html?id=S94EAAAAYAAJ) |
 
-We kept grade-A, image-supported extractions with all seven sections, selected at most one per scan page, and sampled within each edition (seed 2026), retaining the worked Dudeney and Laisant specs. The original INSP4 Gemini Pro export is `extracted_mechanisms_pro_681_mediumfit_high_visual.normalized.jsonl` (SHA-256 `1228e7d2258a88d0ed065ffdd3055b5bbb82e4d198d0e1ea71b55f4ded52073b`). These rows are examples of the extraction output. The [mixing guide](../mixing/README.md) uses them to build generation inputs.
+We kept grade-A, image-supported extractions with all seven sections, selected at most one per scan page, and sampled within each edition (seed 2026), retaining the worked Dudeney and Laisant specs. The full extraction export from that round is not part of this release. These rows are examples of the extraction output. The [mixing guide](../mixing/README.md) uses them to build generation inputs.
 
 ## Prompts
 

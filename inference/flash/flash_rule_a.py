@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rule-A Flash driver (r1027): Flash attempts on a base model's least-sure tasks, requeued per task until settled.
+"""Rule-A Flash driver: Flash attempts on a base model's least-sure tasks, requeued per task until settled.
 
 Runs in the Flash runtime Python with the harness on PYTHONPATH (cwd = harness dir), started by flash_kaggle_run.py --pools.
 The setup copies the harness's own main() (same tokenizer, settings, rows, sandbox core); each attempt is the harness's
