@@ -17,7 +17,7 @@ Verify the archived files from the repo root.
 shasum -a 256 -c manifests/inference.sha256
 ```
 
-For this release, internal names and run tags were removed from comments and docstrings in the two notebooks and the two Flash entry points. Their code is unchanged. [`inference-submitted.sha256`](../manifests/inference-submitted.sha256) keeps the checksums of the files as submitted and as stored in the Kaggle harness dataset.
+For this release, internal names and run tags were removed from comments and docstrings in the two notebooks and the two Flash entry points, and third-party attribution headers were added to the embedded `arc_loader.py` and `arc_decoder.py`. Their code is unchanged. [`inference-submitted.sha256`](../manifests/inference-submitted.sha256) keeps the checksums of the files as submitted and as stored in the Kaggle harness dataset.
 
 ## Inputs
 
