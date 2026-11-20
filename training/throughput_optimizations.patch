@@ -1,3 +1,8 @@
+NVBANANA patch for NVIDIA-NeMo/RL at 87f1dfb1f6e050ec1d8f9dc3a93dbe98ca763280 (Apache-2.0).
+Modified by the NVBANANA team: optional pinned-memory data loading and snapshot interval for
+the SFT data loader, and an optional CUDA cache release before Megatron gradient finalization.
+Both are off unless the ARC2_NEMORL_* environment variables set by training/run_sft.py are present.
+
 --- a/nemo_rl/algorithms/sft.py
 +++ b/nemo_rl/algorithms/sft.py
 @@ -151,6 +151,18 @@
@@ -67,7 +72,7 @@
 +
 +    # This wrapper executes inside the selected Megatron schedule,
 +    # immediately before its gradient-finalization collectives. It is enabled
-+    # only for an explicitly requested diagnostic job and restored afterward.
++    # only when ARC2_NEMORL_EMPTY_CACHE_BEFORE_FINALIZE_GRADS=1 and restored afterward.
 +    model_config = get_model_config(model)
 +    original_finalize_model_grads = model_config.finalize_model_grads_func
 +    pre_finalize_cache_release_enabled = (

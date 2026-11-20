@@ -28,12 +28,12 @@ def _restore_type(original: Any, values: list[int]) -> Any:
 
 
 def restore_compact_role_tokens(message_log: list[dict[str, Any]]) -> dict[str, int]:
-    """Restore `[14, role, 10]` headers in r0.7 ARC message chunks.
+    """Restore `[14, role, 10]` headers in NeMo RL 0.7 ARC message chunks.
 
     NeMo-RL's incremental chat formatting places both the user header and the
     assistant generation header in each user chunk. Assistant chunks contain
-    only the answer continuation and EOS. The affected r0.7 stack realizes both
-    headers as `[14, 10]`; r0.4/Kaggle realizes them as `[14, 11, 10]` and
+    only the answer continuation and EOS. The affected NeMo RL 0.7 formatter realizes both
+    headers as `[14, 10]`; NeMo RL 0.4 and the Kaggle inference path realize them as `[14, 11, 10]` and
     `[14, 12, 10]`.
 
     The operation is idempotent for already-roleful chunks and fails closed on

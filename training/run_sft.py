@@ -90,7 +90,7 @@ def sft_preprocessor(sample, task_data_spec, tokenizer, max_seq_length, idx):
     }
 
 
-def eos_runtime_environment() -> dict[str, str]:
+def throughput_runtime_environment() -> dict[str, str]:
     root = Path(find_spec("nemo_rl").origin).parent
     patches = {
         "algorithms/sft.py": "ARC2_SFT_DATALOADER_OPTIONS_V2",
@@ -98,7 +98,7 @@ def eos_runtime_environment() -> dict[str, str]:
     }
     for relative_path, marker in patches.items():
         if marker not in (root / relative_path).read_text(encoding="utf-8"):
-            raise RuntimeError("Apply training/eos_optimizations.patch to the pinned NeMo RL checkout")
+            raise RuntimeError("Apply training/throughput_optimizations.patch to the pinned NeMo RL checkout")
     return {
         "ARC2_NEMORL_DATALOADER_PIN_MEMORY": "1",
         "ARC2_NEMORL_DATALOADER_SNAPSHOT_EVERY_N_STEPS": "1",
@@ -121,7 +121,7 @@ def shuffle_training_dataset(dataset, seed):
     return dataset.shuffle(seed=seed, indices_cache_file_name=str(path))
 
 
-def load_split(path, tokenizer, task_spec, config, audit_all, *, eos_shuffle=False):
+def load_split(path, tokenizer, task_spec, config, audit_all, *, cached_shuffle=False):
     dataset = load_from_disk(str(path))
     if dataset.column_names != ["puzzle_name", "messages"] or not len(dataset):
         raise ValueError(f"{path} must be a nonempty dataset from the SDG Hugging Face export")
@@ -129,7 +129,7 @@ def load_split(path, tokenizer, task_spec, config, audit_all, *, eos_shuffle=Fal
     for idx in range(len(dataset) if audit_all else 1):
         prepared = sft_preprocessor(dataset[idx], task_spec, tokenizer, sequence_length, idx)
         print(f"ARC-16 formatter check: {dataset[idx]['puzzle_name']} ({prepared['length']} tokens)", flush=True)
-    if eos_shuffle:
+    if cached_shuffle:
         dataset = shuffle_training_dataset(dataset, config.sft.seed)
     return AllTaskProcessedDataset(
         dataset, tokenizer, task_spec, sft_preprocessor, max_seq_length=sequence_length,
@@ -194,10 +194,10 @@ def main():
     config.logger.log_dir = str((args.output / "logs").resolve())
     config_dict = OmegaConf.to_container(config, resolve=True)
     cache = cache_settings(config_dict.pop("compile_cache", None))
-    eos_optimizations = config_dict.pop("eos_optimizations", False)
-    if type(eos_optimizations) is not bool:
-        raise ValueError("eos_optimizations must be a boolean")
-    runtime_env = eos_runtime_environment() if eos_optimizations else {}
+    throughput_optimizations = config_dict.pop("throughput_optimizations", False)
+    if type(throughput_optimizations) is not bool:
+        raise ValueError("throughput_optimizations must be a boolean")
+    runtime_env = throughput_runtime_environment() if throughput_optimizations else {}
     config = MasterConfig(**config_dict)
 
     tokenizer = get_tokenizer(config.policy["tokenizer"])
@@ -206,7 +206,7 @@ def main():
     task_spec = TaskDataSpec(task_name="AGI")
     train = load_split(
         args.data / "train", tokenizer, task_spec, config, args.preflight,
-        eos_shuffle=eos_optimizations and not args.preflight,
+        cached_shuffle=throughput_optimizations and not args.preflight,
     )
     if len(train) < config.policy["train_global_batch_size"]:
         raise ValueError("Training split is smaller than the global batch size")

@@ -35,7 +35,8 @@ The [model spec](arc16/model_spec.json) records the fixed source ID mapping.
 The compact IDs represent digits 0–9, newline, user, assistant, padding,
 message start, and message end, in that order. The bundled tokenizer and
 chat template are the files used by the production base, verified against
-its conversion manifest. [NVARC tokenizer work](https://github.com/1ytic/NVARC/tree/846d0198efa752534594e321fc3289fc0a06c657/ARChitects)
+its conversion manifest. The 16-token vocabulary follows the
+[NVARC and ARChitects tokenizer](https://github.com/1ytic/NVARC/tree/846d0198efa752534594e321fc3289fc0a06c657/ARChitects).
 
 ## Build the smoke dataset
 
@@ -100,9 +101,8 @@ validation settings, and checkpoint interval for your data.
 ## Reuse the compiler cache across jobs
 
 For chained Slurm runs, add this optional top-level block to the SFT YAML
-passed with `--config`. JFPuget introduced the cache in ARC2's `eos-jf`
-branch in commits `2b3fdf9` and `0bd3e85`. The [cache helper](compile_cache.py)
-uses the same snapshot format.
+passed with `--config`. The [cache helper](compile_cache.py) seeds and
+publishes the snapshots.
 
 ```yaml
 compile_cache:
@@ -131,18 +131,18 @@ Look for `compile_cache_seed=cold` followed by
 same key reports `compile_cache_seed=restored` or
 `compile_cache_seed=already-current`.
 
-## EOS 16K performance profile
+## 16K throughput profile
 
-The [EOS profile](sft_eos_16k.yaml) takes the same reduced dataset through
-the settings used by the Qwen3.8-27B EOS production continuation. It uses
+The [throughput profile](sft_throughput_16k.yaml) takes the same reduced
+dataset through the settings of the initial production SFT phase
+(steps 0–72,333, see the [production record](production.md)). It uses
 BF16, TP4/PP2/CP1 with sequence parallelism, fused RoPE, full activation
 recomputation, and overlapping gradient reduction and parameter gather.
 It packs into 16,384-token bins with a 12,288-token per-sequence cap.
-The initial EOS parent used 32K bins and switched to 16K around step 3,400.
-We checked these settings against the saved EOS checkpoint config and
-the [`eos-jf` branch](https://github.com/darraghdog/kaggle-arc2/tree/691035b81bf83a9819d682abfa5d2306a5720ebb).
+The production run used 32K bins and switched to 16K at step 3,400.
+We checked these settings against the saved production checkpoint config.
 
-The [NeMo RL patch](eos_optimizations.patch) carries the two runtime changes
+The [NeMo RL patch](throughput_optimizations.patch) carries the two runtime changes
 enabled by that run. The training dataloader pins host memory, uses four
 workers, and snapshots its state every step. The Megatron worker releases
 unused CUDA allocator blocks before gradient finalization. The production
@@ -153,10 +153,10 @@ Prepare a separate runtime worktree from the NeMo RL checkout described
 above. Keep the pinned Megatron Bridge paths on `PYTHONPATH`.
 
 ```bash
-eos_rl=/path/to/NeMo-RL-eos
-git -C /path/to/NeMo-RL worktree add --detach "$eos_rl" 87f1dfb1f6e050ec1d8f9dc3a93dbe98ca763280
-git -C "$eos_rl" apply "$PWD/training/eos_optimizations.patch"
-export PYTHONPATH="$eos_rl${PYTHONPATH:+:$PYTHONPATH}"
+patched_rl=/path/to/NeMo-RL-throughput
+git -C /path/to/NeMo-RL worktree add --detach "$patched_rl" 87f1dfb1f6e050ec1d8f9dc3a93dbe98ca763280
+git -C "$patched_rl" apply "$PWD/training/throughput_optimizations.patch"
+export PYTHONPATH="$patched_rl${PYTHONPATH:+:$PYTHONPATH}"
 
 export NVBANANA_COMPILE_CACHE_KEY=qwen38-27b-r070-sm90-tp4-pp2-bf16-pack16k-seq12k-v1
 export NVBANANA_COMPILE_CACHE_LOCAL=/raid/scratch/my-user/torch-compile
@@ -164,15 +164,17 @@ export NVBANANA_COMPILE_CACHE_SHARED=/shared/my-user/torch-compile-snapshots
 export ARC2_DATASET_SHUFFLE_CACHE_DIR=/shared/my-user/arc-shuffle
 export NRL_MEGATRON_CHECKPOINT_DIR=/shared/my-user/qwen38-27b-tp4-pp2-import
 
-training/run_sft.sh --config training/sft_eos_16k.yaml   --model models/Qwen3.8-27B-ARC16 --data outputs/hoffmann-sft-hf   --output outputs/hoffmann-eos
+training/run_sft.sh --config training/sft_throughput_16k.yaml \
+  --model models/Qwen3.8-27B-ARC16 --data outputs/hoffmann-sft-hf \
+  --output outputs/hoffmann-throughput
 ```
 
 The example uses one eight-GPU node and one optimizer update. Larger runs
 can set the node count, batch, scheduler, and checkpoint cadence in a
-config that inherits this profile. EOS production used NVIDIA Resiliency
+config that inherits this profile. Production used NVIDIA Resiliency
 Extension 0.6.0 at `6c5f2a13c7688d92a7ac7ee6e464721eb8b7345d` for
 checkpointing. The [production record](production.md) describes the later
-optimizer-preserving WSD fork and the GB300 continuation.
+MXFP8 continuation and the optimizer-preserving decay fork.
 
 ## Verification
 
@@ -185,7 +187,7 @@ one BF16 SFT update on four GB300 GPUs with loss 1.2720.
 Use a short node-local `RAY_TMPDIR` if overriding Ray's temporary
 directory. Ray uses this path for its Unix sockets.
 
-The EOS profile completed one update cold and one after restoring the
+The throughput profile completed one update cold and one after restoring the
 checksum-verified snapshot into a fresh local cache directory. Both
 reported loss 1.2759. On eight H100s, the logged step time was 148.92 s
 for the cold run including publication, and 28.31 s for the warm run.

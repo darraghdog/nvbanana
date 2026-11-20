@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Seed and publish JFP's node-local torch compiler cache."""
+"""Seed and publish a node-local torch compiler cache shared across chained jobs."""
 
 from __future__ import annotations
 

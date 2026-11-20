@@ -1,7 +1,7 @@
-# EOS settings on the reduced sample. Scale cluster.num_nodes for a larger run.
+# 16K-bin throughput settings on the reduced sample. Scale cluster.num_nodes for a larger run.
 defaults: sft_smoke.yaml
 
-eos_optimizations: true
+throughput_optimizations: true
 compile_cache:
   enabled: true
   key: ${oc.env:NVBANANA_COMPILE_CACHE_KEY}
